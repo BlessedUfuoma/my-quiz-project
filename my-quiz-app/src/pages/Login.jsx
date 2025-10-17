@@ -23,7 +23,7 @@ const Login = () => {
   };
 
   return (
-  <div class="h-screen w-full bg-gradient-to-b from-[#3B82F6] to-[#999999]">
+  <div className="min-h-screen w-full bg-gradient-to-b from-[#3B82F6] to-[#999999] flex flex-col items-center justify-center">
       <div class="flex justify-center items-center md:shrink"> 
         <img
         style={{marginTop: 20 + 'px'}}
