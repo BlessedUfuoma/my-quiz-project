@@ -5,25 +5,31 @@ import { useNavigate } from "react-router-dom";
 function Quiz() {
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState("");
+  const [selectedAnswers, setSelectedAnswers] = useState({});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [timer, setTimer] = useState(30);
 
   const navigate = useNavigate();
 
-  // 🧠 Fetch 10 quiz questions
+  // ✅ Fetch 10 Art questions
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
         const response = await fetch(
-          "https://opentdb.com/api.php?amount=10&type=multiple"
+          "https://api.allorigins.win/get?url=" +
+            encodeURIComponent(
+              "https://opentdb.com/api.php?amount=10&category=25&difficulty=easy&type=multiple"
+            )
         );
-        const data = await response.json();
-        console.log("API response:", data);
 
-        if (data.response_code === 0 && data.results.length > 0) {
-          setQuestions(data.results);
+        const data = await response.json();
+        const trivia = JSON.parse(data.contents);
+
+        console.log("API response:", trivia);
+
+        if (trivia.response_code === 0 && trivia.results.length > 0) {
+          setQuestions(trivia.results);
         } else {
           setError("No questions found.");
         }
@@ -38,13 +44,12 @@ function Quiz() {
     fetchQuestions();
   }, []);
 
-  // ⏱ Timer countdown logic
+  // ⏱ Timer countdown
   useEffect(() => {
     if (timer > 0) {
       const countdown = setTimeout(() => setTimer(timer - 1), 1000);
       return () => clearTimeout(countdown);
     } else {
-      // Automatically go to next question
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion((prev) => prev + 1);
         setTimer(30);
@@ -52,18 +57,27 @@ function Quiz() {
     }
   }, [timer, currentQuestion, questions.length]);
 
-  if (loading) return <p className="text-white text-center mt-10">Loading questions...</p>;
-  if (error) return <p className="text-red-500 text-center mt-10">{error}</p>;
+  if (loading)
+    return <p className="text-white text-center mt-10">Loading questions...</p>;
+  if (error)
+    return <p className="text-red-500 text-center mt-10">{error}</p>;
 
   const current = questions[currentQuestion];
   const allOptions = [...current.incorrect_answers, current.correct_answer].sort();
 
-  // 🧭 Navigation
+  // ✅ Handle option select
+  const handleAnswerSelect = (option) => {
+    setSelectedAnswers({
+      ...selectedAnswers,
+      [currentQuestion]: option,
+    });
+  };
+
+  // ✅ Navigation buttons
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setTimer(30);
-      setSelectedAnswer("");
     }
   };
 
@@ -71,12 +85,27 @@ function Quiz() {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
       setTimer(30);
-      setSelectedAnswer("");
     }
   };
 
+  // ✅ Submit quiz
   const handleSubmit = () => {
-    navigate("/answer");
+    let score = 0;
+
+    questions.forEach((q, index) => {
+      if (selectedAnswers[index] === q.correct_answer) {
+        score++;
+      }
+    });
+
+    navigate("/answer", {
+      state: {
+        score,
+        total: questions.length,
+        selectedAnswers,
+        questions,
+      },
+    });
   };
 
   return (
@@ -89,7 +118,7 @@ function Quiz() {
         </button>
       </div>
 
-      {/* Bold Question Label */}
+      {/* Question Label */}
       <h2 className="text-3xl font-bold mb-4">
         Question {currentQuestion + 1}
       </h2>
@@ -104,9 +133,9 @@ function Quiz() {
         {allOptions.map((option, index) => (
           <button
             key={index}
-            onClick={() => setSelectedAnswer(option)}
+            onClick={() => handleAnswerSelect(option)}
             className={`px-4 py-2 rounded-lg border text-left ${
-              selectedAnswer === option
+              selectedAnswers[currentQuestion] === option
                 ? "bg-[#434799]"
                 : "bg-white/20 hover:bg-white/30"
             } transition`}
@@ -120,13 +149,13 @@ function Quiz() {
       <div className="flex justify-between w-full max-w-md mt-8">
         <button
           onClick={handlePrevious}
-          className="bg-[#434799] px-6 py-2 rounded-lg hover:opacity-90"
+          className="bg-gradient-to-br from-[#434799] to-[#747AF5] px-6 py-2 rounded-lg hover:opacity-90"
         >
           Previous
         </button>
         <button
           onClick={handleNext}
-          className="bg-[#747AF5] px-6 py-2 rounded-lg hover:opacity-90"
+          className="bg-gradient-to-br from-[#434799] to-[#747AF5] px-6 py-2 rounded-lg hover:opacity-90"
         >
           Next
         </button>
