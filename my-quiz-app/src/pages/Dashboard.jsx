@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Clock, Trophy } from "lucide-react"; // ✅ Added Trophy icon
+import { Clock, Trophy } from "lucide-react"; 
 
 
 function Dashboard() {
@@ -15,7 +15,7 @@ function Dashboard() {
       {/* Title */}
       <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center leading-tight">Welcome To Quizbuddy</h1>
 
-      {/* Circle with line and numbers */}
+      {}
       <div className="bg-gradient-to-b from-[#434799]  to-[#747AF5] relative flex items-center justify-center w-40 h-40 rounded-full mb-10">
         {/* Left number */}
         <span className="absolute left-[15%] text-2xl font-bold">35</span>

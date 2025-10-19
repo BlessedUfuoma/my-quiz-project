@@ -11,18 +11,18 @@ function Profile() {
   const [completedQuizzes, setCompletedQuizzes] = useState([]);
 
   useEffect(() => {
-    // ✅ Get user profile
+    
     const storedUser = JSON.parse(localStorage.getItem("userProfile"));
     if (storedUser && storedUser.name && storedUser.email) {
       setUser(storedUser);
     }
 
-    // ✅ Get quiz progress
+    
     const storedProgress = JSON.parse(localStorage.getItem("quizProgress")) || [];
     setCompletedQuizzes(storedProgress);
   }, []);
 
-  // ✅ Get the two most recent completed quizzes
+  
   const recentQuizzes = completedQuizzes.slice(-2).reverse();
 
   return (
@@ -67,7 +67,7 @@ function Profile() {
           <h3 className="text-lg font-semibold">Achievements</h3>
         </div>
 
-        {/* Trophy + Star Buttons */}
+        {}
         <div className="flex justify-center gap-4">
           <button className="flex items-center gap-2 bg-gradient-to-br from-[#434799] to-[#747AF5] px-6 py-3 rounded-xl font-semibold shadow-md hover:scale-105 transition-transform">
             <Trophy size={24} />

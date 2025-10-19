@@ -5,17 +5,17 @@ function Answer() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // ✅ Get quiz data passed from the quiz page
+  
   const {
     score = 0,
     total = 10,
     subjectName = "General Knowledge",
   } = location.state || {};
 
-  // ✅ Calculate quiz percentage
+  
   const percentage = Math.round((score / total) * 100);
 
-  // ✅ Save progress safely into localStorage
+  
   useEffect(() => {
     let savedProgress;
 
@@ -23,7 +23,7 @@ function Answer() {
       // Try to get saved progress
       savedProgress = JSON.parse(localStorage.getItem("quizProgress")) || [];
 
-      // If not an array, reset it
+     
       if (!Array.isArray(savedProgress)) savedProgress = [];
     } catch (err) {
       savedProgress = [];

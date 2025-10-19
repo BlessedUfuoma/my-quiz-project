@@ -13,11 +13,11 @@ function Quiz() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // ✅ Get category & name from Subject page
-  const categoryId = location.state?.categoryId || 9; // Default: General Knowledge
+  
+  const categoryId = location.state?.categoryId || 9; 
   const subjectName = location.state?.subjectName || "General Knowledge";
 
-  // ✅ Fetch quiz questions
+  
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -49,7 +49,7 @@ function Quiz() {
     fetchQuestions();
   }, [categoryId]);
 
-  // ⏱ Timer countdown logic
+  
   useEffect(() => {
     if (timer > 0) {
       const countdown = setTimeout(() => setTimer(timer - 1), 1000);
@@ -75,7 +75,7 @@ function Quiz() {
   const current = questions[currentQuestion];
   const allOptions = [...current.incorrect_answers, current.correct_answer].sort();
 
-  // ✅ Handle answer selection
+  
   const handleAnswerSelect = (option) => {
     setSelectedAnswers({
       ...selectedAnswers,
@@ -83,7 +83,7 @@ function Quiz() {
     });
   };
 
-  // ✅ Navigation
+  
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
@@ -98,7 +98,7 @@ function Quiz() {
     }
   };
 
-    // ✅ Submit quiz and navigate to Answer page
+   
   const handleSubmit = () => {
     let score = 0;
 
@@ -108,10 +108,10 @@ function Quiz() {
       }
     });
 
-    // ✅ Calculate percentage
+    
     const percentage = Math.round((score / questions.length) * 100);
 
-    // ✅ Save progress by subject
+    
     const existingData = JSON.parse(localStorage.getItem("quizProgress")) || {};
     const subjectData = existingData[subjectName] || [];
     subjectData.push(percentage);

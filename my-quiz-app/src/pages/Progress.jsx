@@ -11,7 +11,7 @@ function Progress() {
     const savedProgress = JSON.parse(localStorage.getItem("quizProgress")) || [];
 
     if (savedProgress.length > 0) {
-      // Group by subject and calculate averages
+      
       const grouped = savedProgress.reduce((acc, quiz) => {
         if (!acc[quiz.subject]) acc[quiz.subject] = [];
         acc[quiz.subject].push(quiz.percentage);
@@ -25,7 +25,7 @@ function Progress() {
 
       setSubjects(subjectScores);
 
-      // Calculate overall average percentage
+      
       const avg =
         subjectScores.reduce((a, b) => a + b.score, 0) / subjectScores.length;
       setOverallPercentage(Math.round(avg));
